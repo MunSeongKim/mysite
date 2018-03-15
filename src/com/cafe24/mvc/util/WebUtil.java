@@ -8,6 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class WebUtil {
+    public static Integer checkParameter( Integer value, Integer defaultValue ) {
+
+	return defaultValue;
+    }
+
+    public static Long checkParameter( Long value, Long defaultValue ) {
+
+	return defaultValue;
+    }
+
+    public static String checkParameter( String value, String defaultValue ) {
+
+	return defaultValue;
+    }
 
     public static void redirect( HttpServletRequest request, HttpServletResponse response, String url )
 	    throws ServletException, IOException {

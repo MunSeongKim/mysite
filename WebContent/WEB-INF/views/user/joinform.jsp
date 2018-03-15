@@ -1,3 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
@@ -8,20 +11,21 @@
 </head>
 <body>
 	<div id="container">
-		<jsp:include page="/WEB-INF/views/includes/header.jsp" />
+		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="user">
-
-				<form id="join-form" name="joinForm" method="" action="">
+				<form id="join-form" name="joinForm" method="POST" action="/mysite/user">
+					<input name="a" type="hidden" value="join" />
+					
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
+					<input id="name" name="name" type="text" value="" />
 
 					<label class="block-label" for="email">이메일</label>
-					<input id="email" name="email" type="text" value="">
-					<input type="button" value="id 중복체크">
+					<input id="email" name="email" type="text" value="" />
+					<input type="button" value="id 중복체크" />
 					
 					<label class="block-label">패스워드</label>
-					<input name="password" type="password" value="">
+					<input name="password" type="password" value="" />
 					
 					<fieldset>
 						<legend>성별</legend>
@@ -40,8 +44,8 @@
 				</form>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/views/includes/navigation.jsp" />
-		<jsp:include page="/WEB-INF/views/includes/footer.jsp" />
+		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
+		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>
 </html>
