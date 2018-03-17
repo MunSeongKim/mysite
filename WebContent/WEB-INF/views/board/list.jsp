@@ -17,7 +17,7 @@
 			<div id="board">
 				<form id="search_form" action="/mysite/board" method="post">
 					<input type="hidden" name="a" value="search" />
-					<input type="text" id="kwd" name="kwd" value="${ key }" />
+					<input type="text" id="kwd" name="kwd" value="" />
 					<input type="submit" value="찾기" />
 				</form>
 				<table class="tbl-ex">
@@ -37,7 +37,7 @@
 							<c:if test='${ result.vo.depth gt 0 }'>
 								<img src="/mysite/assets/images/reply.png" />
 							</c:if>
-							<a href="/mysite/board?a=view&no=${ result.vo.no }">${ result.vo.title }</a>
+							<a href="/mysite/board?a=view&no=${ result.vo.no }&p=${ pager.currentPageNumber }">${ result.vo.title }</a>
 						</td>
 						<td>${ result.username }</td>
 						<td>${ result.vo.hitCount }</td>

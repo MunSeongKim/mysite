@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cafe24.mvc.action.Action;
 import com.cafe24.mvc.util.Pager;
+import com.cafe24.mvc.util.PagerUtil;
 import com.cafe24.mvc.util.WebUtil;
 import com.cafe24.mysite.dao.BoardDAO;
 import com.cafe24.mysite.dto.BoardDTO;
@@ -28,11 +29,8 @@ public class SearchAction implements Action {
 	    return ;
 	}
 	
-	
-		
 	list = dao.readAll( keyword, pager );
 	request.setAttribute( "list", list );
-	request.setAttribute( "key", keyword );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/list.jsp" );
     }
 

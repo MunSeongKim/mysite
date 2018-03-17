@@ -97,7 +97,7 @@ public class BoardDAO {
 	    		 " ORDER BY group_no DESC, order_no ASC" + 
 	    		 "    LIMIT ?, ?";
 	    pstmt = conn.prepareStatement( sql );
-	    pstmt.setInt( 1, (pager.getCurrentPageNumber() - 1) * 10 );
+	    pstmt.setInt( 1, (pager.getCurrentPageNumber() - 1) * pager.getPostCount() );
 	    pstmt.setInt( 2, pager.getPostCount() );
 	    rs = pstmt.executeQuery();
 	    
