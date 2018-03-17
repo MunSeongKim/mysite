@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.cafe24.mvc.action.Action;
+import com.cafe24.mvc.util.Pager;
 import com.cafe24.mvc.util.WebUtil;
 import com.cafe24.mysite.dao.BoardDAO;
 import com.cafe24.mysite.dto.BoardDTO;
@@ -18,15 +19,14 @@ public class SearchAction implements Action {
     public void execute( HttpServletRequest request, HttpServletResponse response )
 	    throws ServletException, IOException {
 	String keyword = request.getParameter( "kwd" );
-		
 	if ( keyword == null ) {
 	    WebUtil.redirect( request, response, "/mysite/board" );
 	    return ;
 	}
 	
-	// request.getSession().setAttribute( "keyword", keyword );
+	Pager pager = (Pager)request.getSession().getAttribute( "pager" );
 		
-	List<BoardDTO> list = new BoardDAO().readAll( keyword );
+	List<BoardDTO> list = new BoardDAO().readAll( keyword, pager );
 	request.setAttribute( "list", list );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/list.jsp" );
     }

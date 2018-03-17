@@ -21,8 +21,11 @@ public class ViewAction implements Action {
 	    WebUtil.redirect( request, response, "/mysite/board" );
 	    return;
 	}
+
+	BoardDAO dao = new BoardDAO();
 	Long no = Long.parseLong( tmpNo );
-	BoardDTO dto = new BoardDAO().read( no );
+	dao.update( no );
+	BoardDTO dto = dao.read( no );
 	request.setAttribute( "result", dto );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/view.jsp" );
     }

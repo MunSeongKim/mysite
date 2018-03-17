@@ -29,17 +29,22 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:set var="count" value="${ fn:length(list) }" />
-					<c:forEach items="${ list }" var="resultVo" varStatus="status">
+					
+					<c:forEach items="${ list }" var="result" varStatus="status">
 					<tr>
-						<td>${ count - status.index }</td>
-						<td style="text-align:left"><a href="/mysite/board?a=view&no=${resultVo.vo.no }">${ resultVo.vo.title }</a></td>
-						<td>${ resultVo.username }</td>
-						<td>${ resultVo.vo.hitCount }</td>
-						<td>${ resultVo.vo.regDate }</td>
+						<td>${ pager.startPostNumber - status.index }</td>
+						<td style="text-align:left; padding-left: ${ result.vo.depth * 20 }px">
+							<c:if test='${ result.vo.depth gt 0 }'>
+								<img src="/mysite/assets/images/reply.png" />
+							</c:if>
+							<a href="/mysite/board?a=view&no=${ result.vo.no }">${ result.vo.title }</a>
+						</td>
+						<td>${ result.username }</td>
+						<td>${ result.vo.hitCount }</td>
+						<td>${ result.vo.regDate }</td>
 						<td>
-						<c:if test="${ not empty authUser && resultVo.vo.userNo eq authUser.no }">
-							<a href="/mysite/board?a=delete&no=${ resultVo.vo.no }" class="del">삭제</a>
+						<c:if test="${ not empty authUser && result.vo.userNo eq authUser.no }">
+							<a href="/mysite/board?a=delete&no=${ result.vo.no }" class="del">삭제</a>
 						</c:if>
 						</td>
 					</tr>
@@ -47,13 +52,25 @@
 				</table>
 				<div class="pager">
 					<ul>
+						<c:if test='${ pager.leftNavigator }'>
 						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li><a href="">2</a></li>
-						<li class="selected">3</li>
-						<li><a href="">4</a></li>
-						<li>5</li>
+						</c:if>
+						<c:forEach begin='0' end='${ pager.pageCount -1 }' var='i' step='1'>
+						<c:choose>
+							<c:when test='${ (pager.startPageNumber + i) ne pager.currentPageNumber }'>
+								<li><a href="/mysite/board?p=${ pager.startPageNumber + i }">${ pager.startPageNumber + i }</a></li>
+							</c:when>
+							<c:when test='${ (pager.startPageNumber + i) eq pager.currentPageNumber }'>
+								<li class="selected"><a href="/mysite/board?p=${ pager.startPageNumber + i }">${ pager.startPageNumber + i }</a></li>
+							</c:when>
+							<c:when test='${ (pager.startPageNumber + i) gt pager.activePageNumber }'>
+								<li>${ pager.startPageNumber + i }</li>
+							</c:when>
+						</c:choose>
+						</c:forEach>
+						<c:if test='${ pager.rightNavigator }'>
 						<li><a href="">▶</a></li>
+						</c:if>
 					</ul>
 				</div>
 				<c:if test="${ not empty sessionScope.authUser }">

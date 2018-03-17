@@ -8,11 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cafe24.mvc.util.Pager;
 import com.cafe24.mysite.dto.BoardDTO;
 import com.cafe24.mysite.vo.BoardVO;
 
 public class BoardDAO {
-    public List<BoardDTO> readAll() {
+    public List<BoardDTO> readAll(Pager pager) {
 	List<BoardDTO> list = new ArrayList<BoardDTO>();
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -32,8 +33,11 @@ public class BoardDAO {
 	    		 "          users.name" + 
 	    		 "     FROM board, users" + 
 	    		 "    WHERE board.user_no = users.no" + 
-	    		 " ORDER BY group_no DESC, order_no ASC";
+	    		 " ORDER BY group_no DESC, order_no ASC" +
+	    		 "    LIMIT ?, ?";
 	    pstmt = conn.prepareStatement( sql );
+	    pstmt.setInt( 1, (pager.getCurrentPageNumber() - 1) * pager.getPostCount() );
+	    pstmt.setInt( 2, pager.getPostCount() );
 	    rs = pstmt.executeQuery();
 
 	    while ( rs.next() ) {
@@ -69,7 +73,7 @@ public class BoardDAO {
 	return list;
     }
     
-    public List<BoardDTO> readAll(String keyword) {
+    public List<BoardDTO> readAll(String keyword, Pager pager) {
 	List<BoardDTO> list = new ArrayList<BoardDTO>();
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -90,8 +94,11 @@ public class BoardDAO {
 	    		 "     FROM board, users" + 
 	    		 "    WHERE board.user_no = users.no" +
 	    		 "      AND board.title LIKE '%" + keyword + "%'" +
-	    		 " ORDER BY group_no DESC, order_no ASC";
+	    		 " ORDER BY group_no DESC, order_no ASC" + 
+	    		 "    LIMIT ?, ?";
 	    pstmt = conn.prepareStatement( sql );
+	    pstmt.setInt( 1, (pager.getCurrentPageNumber() - 1) * 10 );
+	    pstmt.setInt( 2, pager.getPostCount() );
 	    rs = pstmt.executeQuery();
 	    
 	    while ( rs.next() ) {
@@ -236,6 +243,35 @@ public class BoardDAO {
 	}
 	return dto;
     }
+    
+    public int readCount( ) {
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	int count = 0;
+	
+	try {
+	    conn = getConnection();
+	    String sql = "SELECT COUNT(*) FROM board";
+	    pstmt = conn.prepareStatement( sql );
+	    rs = pstmt.executeQuery();
+	    
+	    if ( rs.next() ) {
+		count = rs.getInt(1);
+	    }
+	} catch ( SQLException e ) {
+	    e.printStackTrace();
+	} finally {
+	    try {
+		if ( rs != null ) rs.close();
+		if ( pstmt != null ) pstmt.close();
+		if ( conn != null ) conn.close();
+	    } catch ( SQLException e ) {
+		e.printStackTrace();
+	    }
+	}
+	return count;
+    }
 
     public boolean create( BoardVO vo, Long userNo ) {
 	boolean result = false;
@@ -287,8 +323,8 @@ public class BoardDAO {
 	    pstmt.setString( 1, vo.getTitle() );
 	    pstmt.setString( 2, vo.getContent() );
 	    pstmt.setLong( 3, groupNo );
-	    pstmt.setLong( 4, (orderNo + 1) );
-	    pstmt.setLong( 5, (depth + 1) );
+	    pstmt.setLong( 4, orderNo );
+	    pstmt.setLong( 5, depth );
 	    pstmt.setLong( 6, userNo );
 
 	    int count = pstmt.executeUpdate();
@@ -325,6 +361,36 @@ public class BoardDAO {
 
 	    int count = pstmt.executeUpdate();
 	    result = (count == 1) ? true : false;
+	} catch ( SQLException e ) {
+	    e.printStackTrace();
+	} finally {
+	    try {
+		if ( pstmt != null ) pstmt.close();
+		if ( conn != null ) conn.close();
+	    } catch ( SQLException e ) {
+		e.printStackTrace();
+	    }
+	}
+
+	return result;
+    }
+    
+    public boolean update( Long no ) {
+	boolean result = false;
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+
+	try {
+	    conn = getConnection();
+	    String sql = " UPDATE board" + 
+	    		 "    SET hit_count = hit_count + 1" + 
+	    		 "  WHERE no = ?";
+	    pstmt = conn.prepareStatement( sql );
+
+	    pstmt.setLong( 1, no );
+
+	    int count = pstmt.executeUpdate();
+	    result = (count == 1);
 	} catch ( SQLException e ) {
 	    e.printStackTrace();
 	} finally {

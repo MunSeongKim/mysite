@@ -30,7 +30,7 @@ public class ReplyAction implements Action {
 	vo.setTitle( title );
 	vo.setContent( content );
 
-	dao.create( vo, authUser.getNo(), groupNo, orderNo, depth );
+	dao.create( vo, authUser.getNo(), groupNo, orderNo +1, depth +1 );
 
 	BoardDTO dto = dao.readAtLast();
 	request.setAttribute( "result", dto );
