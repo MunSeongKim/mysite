@@ -17,7 +17,7 @@
 			<div id="board">
 				<form id="search_form" action="/mysite/board" method="post">
 					<input type="hidden" name="a" value="search" />
-					<input type="text" id="kwd" name="kwd" value="" />
+					<input type="text" id="kwd" name="kwd" value="${ key }" />
 					<input type="submit" value="찾기" />
 				</form>
 				<table class="tbl-ex">
@@ -53,7 +53,7 @@
 				<div class="pager">
 					<ul>
 						<c:if test='${ pager.leftNavigator }'>
-						<li><a href="">◀</a></li>
+						<li><a href="/mysite/board?p=${ pager.startPageNumber -1 } ">◀</a></li>
 						</c:if>
 						<c:forEach begin='0' end='${ pager.pageCount -1 }' var='i' step='1'>
 						<c:choose>
@@ -69,7 +69,7 @@
 						</c:choose>
 						</c:forEach>
 						<c:if test='${ pager.rightNavigator }'>
-						<li><a href="">▶</a></li>
+						<li><a href="/mysite/board?p=${ pager.endPageNumber +1 } ">▶</a></li>
 						</c:if>
 					</ul>
 				</div>
