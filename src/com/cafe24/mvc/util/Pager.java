@@ -10,7 +10,6 @@ public class Pager {
      *         pageCount - 한 화면의 출력할 페이지 개수
      *    totalPageCount - 전체 게시글의 개수
      * currentPageNumber - 현재 페이지 번호
-     *  activePageNumber - 활성화 페이지의 마지막 번호
      */
 
     private int startPageNumber;
@@ -22,7 +21,6 @@ public class Pager {
     private int pageCount;
     private int totalPageCount;
     private int currentPageNumber;
-    private int activePageNumber;
 
     public Pager() {
 	this.startPageNumber = 1;
@@ -105,19 +103,11 @@ public class Pager {
 	this.currentPageNumber = currentPageNumber;
     }
 
-    public int getActivePageNumber() {
-	return activePageNumber;
-    }
-
-    public void setActivePageNumber( int activePageNumber ) {
-	this.activePageNumber = activePageNumber;
-    }
-
     @Override
     public String toString() {
 	return "Pager [startPageNumber=" + startPageNumber + ", endPageNumber=" + endPageNumber + ", leftNavigator="
 		+ leftNavigator + ", rightNavigator=" + rightNavigator + ", startPostNumber=" + startPostNumber
 		+ ", postCount=" + postCount + ", pageCount=" + pageCount + ", totalPageCount=" + totalPageCount
-		+ ", currentPageNumber=" + currentPageNumber + ", activePageNumber=" + activePageNumber + "]";
+		+ ", currentPageNumber=" + currentPageNumber + "]";
     }
 }

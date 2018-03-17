@@ -19,10 +19,7 @@ public class ListAction implements Action {
     @Override
     public void execute( HttpServletRequest request, HttpServletResponse response )
 	    throws ServletException, IOException {
-	BoardDAO dao = new BoardDAO();
-	List<BoardDTO> list = null;
 	int pageNo = 0;
-	Pager pager = (Pager)request.getSession().getAttribute("pager");
 	String tmpPageNo = request.getParameter( "p" );
 	if( tmpPageNo == null ){
 	    pageNo = 1;
@@ -30,20 +27,19 @@ public class ListAction implements Action {
 	    pageNo = Integer.parseInt(tmpPageNo);
 	}
 	
+	Pager pager = (Pager)request.getSession().getAttribute("pager");
 	// 처음 접속때 pager 생성
 	if( pager == null ){
 	    pager = new Pager();
 	}
 	
-	pager = PagerUtil.setCurrentPageNumber( pager, pageNo );
-	pager = PagerUtil.setStartPostNumber( pager, dao );
-	pager = PagerUtil.setTotalPageCount( pager, dao );
-	pager = PagerUtil.setNavigator(pager);
-	
-	list = dao.readAll(pager);
-
+	BoardDAO dao = new BoardDAO();
+	pager = PagerUtil.setUpPager( pager, dao, pageNo );
 	request.getSession().setAttribute("pager", pager);
+	
+	List<BoardDTO> list = dao.readAll(pager);
 	request.setAttribute( "list", list );
+
 	WebUtil.forward( request, response, "/WEB-INF/views/board/list.jsp" );
     }
 

@@ -272,6 +272,35 @@ public class BoardDAO {
 	}
 	return count;
     }
+    
+    public int readCountBySearch( String keyword ) {
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	int count = 0;
+	
+	try {
+	    conn = getConnection();
+	    String sql = "SELECT COUNT(*) FROM board WHERE title LIKE '%" + keyword + "%'";
+	    pstmt = conn.prepareStatement( sql );
+	    rs = pstmt.executeQuery();
+	    
+	    if ( rs.next() ) {
+		count = rs.getInt(1);
+	    }
+	} catch ( SQLException e ) {
+	    e.printStackTrace();
+	} finally {
+	    try {
+		if ( rs != null ) rs.close();
+		if ( pstmt != null ) pstmt.close();
+		if ( conn != null ) conn.close();
+	    } catch ( SQLException e ) {
+		e.printStackTrace();
+	    }
+	}
+	return count;
+    }
 
     public boolean create( BoardVO vo, Long userNo ) {
 	boolean result = false;

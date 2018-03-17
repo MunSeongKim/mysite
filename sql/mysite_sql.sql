@@ -61,6 +61,11 @@ VALUES(
 UPDATE board
    SET title = '피곤', content = '지침'
  WHERE no = 3;
+ 
+-- Delete All
+DELETE FROM board;
+
+ALTER TABLE board AUTO_INCREMENT=1;
   
 -- Insert a dummy datas for paging test
 DELIMITER $$
@@ -68,7 +73,7 @@ DROP PROCEDURE IF EXISTS loopInsert$$
 CREATE PROCEDURE loopInsert()
 BEGIN
 	DECLARE i INT DEFAULT 1;
-	WHILE i <= 500 DO
+	WHILE i <= 137 DO
 		INSERT INTO board
           VALUES (null,
 				  concat(i, '번째 게시물'),
@@ -82,7 +87,9 @@ BEGIN
 END$$
 DELIMITER $$
 
-CALL loopInsert;
+CALL loopInsert$$
+
+SELECT * FROM board;
 
 
  

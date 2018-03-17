@@ -19,19 +19,34 @@ public class SearchAction implements Action {
     @Override
     public void execute( HttpServletRequest request, HttpServletResponse response )
 	    throws ServletException, IOException {
-	BoardDAO dao = new BoardDAO();
-	List<BoardDTO> list = null;
-	Pager pager = (Pager)request.getSession().getAttribute( "pager" );
-	
 	String keyword = request.getParameter( "kwd" );
 	if ( keyword == null ) {
 	    WebUtil.redirect( request, response, "/mysite/board" );
 	    return ;
 	}
 	
-	list = dao.readAll( keyword, pager );
+	int pageNo = 0;
+	String tmpPageNo = request.getParameter( "p" );
+	if( tmpPageNo == null ){
+	    pageNo = 1;
+	} else {
+	    pageNo = Integer.parseInt(tmpPageNo);
+	}
+	
+	Pager pager = (Pager)request.getSession().getAttribute("pager");
+	// 처음 접속때 pager 생성
+	if( pager == null ){
+	    pager = new Pager();
+	}
+	
+	BoardDAO dao = new BoardDAO();
+	pager = PagerUtil.setUpPager( pager, dao, pageNo, keyword );
+	request.getSession().setAttribute("pager", pager);
+	
+	List<BoardDTO> list = dao.readAll( keyword, pager );
 	request.setAttribute( "list", list );
-	WebUtil.forward( request, response, "/WEB-INF/views/board/list.jsp" );
+	request.setAttribute( "keyword", keyword );
+	WebUtil.forward( request, response, "/WEB-INF/views/board/searchlist.jsp" );
     }
 
 }

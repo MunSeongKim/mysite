@@ -37,7 +37,7 @@
 							<c:if test='${ result.vo.depth gt 0 }'>
 								<img src="/mysite/assets/images/reply.png" />
 							</c:if>
-							<a href="/mysite/board?a=view&no=${ result.vo.no }&p=${ pager.currentPageNumber }">${ result.vo.title }</a>
+							<a href="/mysite/board?a=view&no=${ result.vo.no }&p=${ pager.currentPageNumber }&kwd=${ keyword }">${ result.vo.title }</a>
 						</td>
 						<td>${ result.username }</td>
 						<td>${ result.vo.hitCount }</td>
@@ -53,7 +53,7 @@
 				<div class="pager">
 					<ul>
 						<c:if test='${ pager.leftNavigator }'>
-						<li><a href="/mysite/board?p=${ pager.startPageNumber -1 } ">◀</a></li>
+						<li><a href="/mysite/board?a=search&kwd=${ keyword }&p=${ pager.startPageNumber -1 } ">◀</a></li>
 						</c:if>
 						<c:forEach begin='0' end='${ pager.pageCount -1 }' var='i' step='1'>
 						<c:choose>
@@ -61,15 +61,15 @@
 								<li>${ pager.startPageNumber + i }</li>
 							</c:when>
 							<c:when test='${ (pager.startPageNumber + i) eq pager.currentPageNumber }'>
-								<li class="selected"><a href="/mysite/board?p=${ pager.startPageNumber + i }">${ pager.startPageNumber + i }</a></li>
+								<li class="selected"><a href="/mysite/board?a=search&kwd=${ keyword }&p=${ pager.startPageNumber + i }">${ pager.startPageNumber + i }</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="/mysite/board?p=${ pager.startPageNumber + i }">${ pager.startPageNumber + i }</a></li>
+								<li><a href="/mysite/board?a=search&kwd=${ keyword }&p=${ pager.startPageNumber + i }">${ pager.startPageNumber + i }</a></li>
 							</c:otherwise>
 						</c:choose>
 						</c:forEach>
 						<c:if test='${ pager.rightNavigator }'>
-						<li><a href="/mysite/board?p=${ pager.endPageNumber +1 } ">▶</a></li>
+						<li><a href="/mysite/board?a=search&kwd=${ keyword }&p=${ pager.endPageNumber +1 } ">▶</a></li>
 						</c:if>
 					</ul>
 				</div>
