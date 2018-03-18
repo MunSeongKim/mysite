@@ -51,11 +51,11 @@ public class BoardDAO {
 		vo.setOrderNo( rs.getLong( 7 ) );
 		vo.setDepth( rs.getLong( 8 ) );
 		vo.setUserNo( rs.getLong( 9 ) );
-		String username = rs.getString( 10 );
+		String userName = rs.getString( 10 );
 
 		BoardDTO dto = new BoardDTO();
 		dto.setVo( vo );
-		dto.setUsername( username );
+		dto.setUserName( userName );
 
 		list.add( dto );
 	    }
@@ -112,11 +112,11 @@ public class BoardDAO {
 		vo.setOrderNo( rs.getLong( 7 ) );
 		vo.setDepth( rs.getLong( 8 ) );
 		vo.setUserNo( rs.getLong( 9 ) );
-		String username = rs.getString( 10 );
+		String userName = rs.getString( 10 );
 
 		BoardDTO dto = new BoardDTO();
 		dto.setVo( vo );
-		dto.setUsername( username );
+		dto.setUserName( userName );
 
 		list.add( dto );
 	    }
@@ -134,8 +134,8 @@ public class BoardDAO {
 	return list;
     }
     
-    public BoardDTO read( Long no ) {
-	BoardDTO dto = null;
+    public BoardVO read( Long no ) {
+	BoardVO vo = null;
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
@@ -150,17 +150,15 @@ public class BoardDAO {
 	    		 "          board.group_no," + 
 	    		 "          board.order_no," + 
 	    		 "          board.depth," + 
-	    		 "          board.user_no," +
-	    		 "          users.name" + 
-	    		 "     FROM board, users" + 
-	    		 "    WHERE board.user_no = users.no" +
-	    		 "      AND board.no = ?";
+	    		 "          board.user_no" +
+	    		 "     FROM board" + 
+	    		 "    WHERE board.no = ?";
 	    pstmt = conn.prepareStatement( sql );
 	    pstmt.setLong( 1, no );
 	    rs = pstmt.executeQuery();
 	    
 	    if ( rs.next() ) {
-		BoardVO vo = new BoardVO();
+		vo = new BoardVO();
 		vo.setNo( rs.getLong( 1 ) );
 		vo.setTitle( rs.getString( 2 ) );
 		vo.setContent( rs.getString( 3 ) );
@@ -170,11 +168,7 @@ public class BoardDAO {
 		vo.setOrderNo( rs.getLong( 7 ) );
 		vo.setDepth( rs.getLong( 8 ) );
 		vo.setUserNo( rs.getLong( 9 ) );
-		String username = rs.getString( 10 );
 
-		dto = new BoardDTO();
-		dto.setVo( vo );
-		dto.setUsername( username );
 	    }
 	} catch ( SQLException e ) {
 	    e.printStackTrace();
@@ -187,7 +181,7 @@ public class BoardDAO {
 		e.printStackTrace();
 	    }
 	}
-	return dto;
+	return vo;
     }
     
     public BoardDTO readAtLast( ) {
@@ -224,11 +218,11 @@ public class BoardDAO {
 		vo.setGroupNo( rs.getLong( 6 ) );
 		vo.setOrderNo( rs.getLong( 7 ) );
 		vo.setDepth( rs.getLong( 8 ) );
-		String username = rs.getString( 9 );
+		String userName = rs.getString( 9 );
 
 		dto = new BoardDTO();
 		dto.setVo( vo );
-		dto.setUsername( username );
+		dto.setUserName( userName );
 	    }
 	} catch ( SQLException e ) {
 	    e.printStackTrace();

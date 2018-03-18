@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.cafe24.mvc.action.Action;
 import com.cafe24.mvc.util.WebUtil;
 import com.cafe24.mysite.dao.BoardDAO;
-import com.cafe24.mysite.dto.BoardDTO;
 import com.cafe24.mysite.vo.BoardVO;
 
 public class ModifyAction implements Action {
@@ -29,8 +28,8 @@ public class ModifyAction implements Action {
 	BoardDAO dao = new BoardDAO();
 	dao.update( boardVo );
 	
-	BoardDTO dto = dao.read(no);
-	request.setAttribute( "result", dto );
+	BoardVO vo = dao.read(no);
+	request.setAttribute( "result", vo );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/view.jsp" );
     }
 

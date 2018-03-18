@@ -1,4 +1,4 @@
-package com.cafe24.mysite.action.board;
+package com.cafe24.mysite.action.comment;
 
 import java.io.IOException;
 
@@ -8,14 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cafe24.mvc.action.Action;
 import com.cafe24.mvc.util.WebUtil;
-import com.cafe24.mysite.dao.BoardDAO;
-import com.cafe24.mysite.vo.BoardVO;
+import com.cafe24.mysite.dao.CommentDAO;
 
-public class ModifyFormAction implements Action {
+public class DeleteAction implements Action {
 
     @Override
     public void execute( HttpServletRequest request, HttpServletResponse response )
 	    throws ServletException, IOException {
+	String bno = request.getParameter( "bno" );
+	String pageNo = request.getParameter( "p" );
+	
 	String tmpNo = request.getParameter( "no" );
 	if ( tmpNo == null ) {
 	    WebUtil.redirect( request, response, "/mysite/board" );
@@ -23,10 +25,9 @@ public class ModifyFormAction implements Action {
 	}
 	
 	Long no = Long.parseLong( tmpNo );
-	BoardVO vo = new BoardDAO().read( no );
-	request.setAttribute( "result", vo );
-	request.setAttribute( "action", "modify" );
-	WebUtil.forward( request, response, "/WEB-INF/views/board/modify.jsp" );
+	new CommentDAO().delete( no );
+	
+	WebUtil.redirect( request, response, "/mysite/board?a=view&no=" + bno + "&p=" + pageNo );
     }
 
 }

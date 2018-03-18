@@ -1,16 +1,16 @@
 package com.cafe24.mysite.dto;
 
-import com.cafe24.mysite.vo.BoardVO;
+import com.cafe24.mysite.vo.CommentVO;
 
-public class BoardDTO {
-    private BoardVO vo;
+public class CommentDTO {
+    private CommentVO vo;
     private String userName;
 
-    public BoardVO getVo() {
+    public CommentVO getVo() {
 	return vo;
     }
 
-    public void setVo( BoardVO vo ) {
+    public void setVo( CommentVO vo ) {
 	this.vo = vo;
     }
 
@@ -24,7 +24,7 @@ public class BoardDTO {
 
     @Override
     public String toString() {
-	return "BoardDTO [vo=" + vo + ", userName=" + userName + "]";
+	return "CommentDTO [vo=" + vo + ", userName=" + userName + "]";
     }
 
 }

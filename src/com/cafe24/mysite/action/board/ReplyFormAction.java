@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.cafe24.mvc.action.Action;
 import com.cafe24.mvc.util.WebUtil;
 import com.cafe24.mysite.dao.BoardDAO;
-import com.cafe24.mysite.dto.BoardDTO;
+import com.cafe24.mysite.vo.BoardVO;
 
 public class ReplyFormAction implements Action {
 
@@ -23,8 +23,8 @@ public class ReplyFormAction implements Action {
 	}
 
 	Long no = Long.parseLong( tmpNo );
-	BoardDTO dto = new BoardDAO().read( no );
-	request.setAttribute( "result", dto );
+	BoardVO vo = new BoardDAO().read( no );
+	request.setAttribute( "result", vo );
 	request.setAttribute( "action", "reply" );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/write.jsp" );
     }

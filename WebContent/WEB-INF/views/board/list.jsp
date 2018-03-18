@@ -39,7 +39,7 @@
 							</c:if>
 							<a href="/mysite/board?a=view&no=${ result.vo.no }&p=${ pager.currentPageNumber }">${ result.vo.title }</a>
 						</td>
-						<td>${ result.username }</td>
+						<td>${ result.userName }</td>
 						<td>${ result.vo.hitCount }</td>
 						<td>${ result.vo.regDate }</td>
 						<td>
@@ -75,7 +75,7 @@
 				</div>
 				<c:if test="${ not empty sessionScope.authUser }">
 				<div class="bottom">
-					<a href="/mysite/board?a=writeform" id="new-book">글쓰기</a>
+					<a href="/mysite/board?a=writeform&p=${ pager.currentPageNumber }" id="new-book">글쓰기</a>
 				</div>
 				</c:if>
 			</div>

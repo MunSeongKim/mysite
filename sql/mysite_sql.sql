@@ -1,3 +1,56 @@
+-- 게시판
+ALTER TABLE `board`
+	DROP FOREIGN KEY `FK_users_TO_board`; -- 회원 -> 게시판
+
+-- 댓글
+ALTER TABLE `comment`
+	DROP FOREIGN KEY `FK_users_TO_comment`; -- 회원 -> 댓글
+
+-- 댓글
+ALTER TABLE `comment`
+	DROP FOREIGN KEY `FK_board_TO_comment`; -- 게시판 -> 댓글
+
+-- 게시판
+ALTER TABLE `board`
+	ADD CONSTRAINT `FK_users_TO_board` -- 회원 -> 게시판
+		FOREIGN KEY (
+			`user_no` -- 사용자번호
+		)
+		REFERENCES `users` ( -- 회원
+			`no` -- 번호
+		)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE;
+        
+
+-- 댓글
+ALTER TABLE `comment`
+	ADD CONSTRAINT `FK_users_TO_comment` -- 회원 -> 댓글
+		FOREIGN KEY (
+			`user_no` -- 회원번호
+		)
+		REFERENCES `users` ( -- 회원
+			`no` -- 번호
+		)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE;
+
+-- 댓글
+ALTER TABLE `comment`
+	ADD CONSTRAINT `FK_board_TO_comment` -- 게시판 -> 댓글
+		FOREIGN KEY (
+			`board_no` -- 게시판번호
+		)
+		REFERENCES `board` ( -- 게시판
+			`no` -- 번호
+		)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;
+
+ALTER TABLE board AUTO_INCREMENT=1;
+ALTER TABLE board CHANGE user_no user_no int(11) null;
+ALTER TABLE comment CHANGE user_no user_no int(11) null;
+
 INSERT
   INTO guestbook
 VALUES (null, '안대혁', password('1234'), '안녕하세요.안녕하세요.', DATE_FORMAT('2013-01-15', '%Y-%m-%d %h:%i:%s'));
@@ -22,7 +75,6 @@ SELECT no, name, password
 UPDATE users
    SET password=PASSWORD('1234')
  WHERE no=2;
- 
  
  
  SELECT * FROM board LIMIT 1;
@@ -62,11 +114,54 @@ UPDATE board
    SET title = '피곤', content = '지침'
  WHERE no = 3;
  
+
+-- comment 
+INSERT INTO comment
+values (null, '긁적', now(), 1, 137);
+INSERT INTO comment
+values (null, '두번째', now(), 2, 137);
+INSERT INTO comment
+values (null, '세번째', now(), 1, 137);
+INSERT INTO comment
+values (null, '  네번째', now(), 2, 137);
+INSERT INTO comment
+values (null, '다섯', now(), 1, 137);
+INSERT INTO comment
+values (null, '육개장', now(), 2, 137);
+
+INSERT INTO comment
+values (null, '긁적', now(), 1, 136);
+INSERT INTO comment
+values (null, '두번째', now(), 2, 136);
+INSERT INTO comment
+values (null, '세번째', now(), 1, 136);
+INSERT INTO comment
+values (null, '  네번째', now(), 2, 136);
+INSERT INTO comment
+values (null, '다섯', now(), 1, 136);
+INSERT INTO comment
+values (null, '육개장', now(), 2, 136);
+
+
+
+  SELECT c.no,
+	     c.content,
+         DATE_FORMAT(c.reg_date, '%Y-%m-%d %h:%i:%s'),
+         c.user_no,
+         c.board_no,
+         u.name
+    FROM comment c, users u
+   WHERE c.user_no = u.no
+     AND board_no = 136
+ORDER BY c.reg_date DESC;
+
+
+
+
 -- Delete All
 DELETE FROM board;
 
-ALTER TABLE board AUTO_INCREMENT=1;
-  
+
 -- Insert a dummy datas for paging test
 DELIMITER $$
 DROP PROCEDURE IF EXISTS loopInsert$$
@@ -92,4 +187,8 @@ CALL loopInsert$$
 SELECT * FROM board;
 
 
- 
+
+
+
+
+

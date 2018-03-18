@@ -22,17 +22,19 @@
 					</tr>
 					<tr>
 						<td class="label">제목</td>
-						<td>${ result.vo.title }</td>
+						<td>${ board.title }</td>
 					</tr>
 					<tr>
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								${ result.vo.content }
+								${ board.content }
 							</div>
 						</td>
 					</tr>
 				</table>
+				
+				<c:import url="/WEB-INF/views/comment/list.jsp" />
 				
 				<div class="bottom">
 					<c:choose>
@@ -44,10 +46,10 @@
 						</c:otherwise>
 					</c:choose>
 					<c:if test="${ not empty authUser }">
-					<a href="/mysite/board?a=replyform&no=${ result.vo.no }">답글달기</a>
+					<a href="/mysite/board?a=replyform&no=${ board.no }&p=${ param.p }">답글달기</a>
 					</c:if>
-					<c:if test="${ not empty authUser && result.vo.userNo eq authUser.no }">
-					<a href="/mysite/board?a=modifyform&no=${ result.vo.no }">글수정</a>
+					<c:if test="${ not empty authUser && board.userNo eq authUser.no }">
+					<a href="/mysite/board?a=modifyform&no=${ board.no }&p=${ param.p }">글수정</a>
 					</c:if>
 				</div>
 			</div>

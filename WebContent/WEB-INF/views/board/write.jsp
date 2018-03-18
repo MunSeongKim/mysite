@@ -18,19 +18,15 @@
 			<div id="board">
 				<form class="board-form" method="post" action="/mysite/board">
 					<c:choose>
-						<c:when test='${ action eq "write" }' >
-							<input type="hidden" name="a" value="write" />
-						</c:when>
-						<c:when test='${ action eq "modify" }' >
-							<input type="hidden" name="a" value="modify" />
-							<input type="hidden" name="no" value="${ result.vo.no }" />
-						</c:when>
 						<c:when test='${ action eq "reply" }' >
 							<input type="hidden" name="a" value="reply" />
-							<input type="hidden" name="group-no" value="${ result.vo.groupNo }" />
-							<input type="hidden" name="order-no" value="${ result.vo.orderNo }" />
-							<input type="hidden" name="depth" value="${ result.vo.depth }" />
+							<input type="hidden" name="group-no" value="${ result.groupNo }" />
+							<input type="hidden" name="order-no" value="${ result.orderNo }" />
+							<input type="hidden" name="depth" value="${ result.depth }" />
 						</c:when>
+						<c:otherwise>
+							<input type="hidden" name="a" value="write" />
+						</c:otherwise>
 					</c:choose>
 					
 					<table class="tbl-ex">
@@ -40,42 +36,26 @@
 						<tr>
 							<td class="label">제목</td>
 							<td>
-								<c:choose>
-									<c:when test='${ action ne "modify" }'>
-										<input type="text" name="title" value="">
-									</c:when>
-									<c:when test='${ action eq "modify" }'>
-										<input type="text" name="title" value="${ result.vo.title }">
-									</c:when>
-								</c:choose>
+								<input type="text" name="title" value="">
 							</td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<c:choose>
-									<c:when test='${ action ne "modify" }'>
-										<textarea id="content" name="content"></textarea>
-									</c:when>
-									<c:when test='${ action eq "modify" }'>
-										<textarea id="content" name="content">${ result.vo.content }</textarea>
-									</c:when>
-								</c:choose>
-								
+								<textarea id="content" name="content"></textarea>
 							</td>
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="/mysite/board">취소</a>
 						<c:choose>
-							<c:when test='${ action ne "modify" }' >
-								<input type="submit" value="등록">
+							<c:when test='${ action eq "reply" }' >
+								<a href="/mysite/board?a=view&no=${ result.no }&p=${ param.p }">취소</a>
 							</c:when>
-							<c:when test='${ action eq "modify" }' >
-								<input type="submit" value="수정">
-							</c:when>
+							<c:otherwise>
+								<a href="/mysite/board?a=search&kwd=${ param.kwd }&p=${ param.p }">취소</a>
+							</c:otherwise>
 						</c:choose>
-						
+						<input type="submit" value="등록">
 					</div>
 				</form>
 			</div>

@@ -34,7 +34,7 @@
 						</tr>
 					</table>
 				</form>
-				<br>
+				<br />
 				<c:set var="count" value="${ fn:length(list) }" />
 				<c:forEach items="${ list }" var="vo" varStatus="status">
 					<table width="100%" border="1">
