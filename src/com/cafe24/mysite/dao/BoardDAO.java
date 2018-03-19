@@ -13,66 +13,7 @@ import com.cafe24.mysite.dto.BoardDTO;
 import com.cafe24.mysite.vo.BoardVO;
 
 public class BoardDAO {
-    public List<BoardDTO> readAll(Pager pager) {
-	List<BoardDTO> list = new ArrayList<BoardDTO>();
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
-
-	try {
-	    conn = getConnection();
-	    String sql = "   SELECT board.no," + 
-	    		 "	    board.title," + 
-	    		 "          board.content," + 
-	    		 "          board.hit_count," + 
-	    		 "          DATE_FORMAT(board.reg_date, '%Y-%m-%d %h:%i:%s')," + 
-	    		 "          board.group_no," + 
-	    		 "          board.order_no," + 
-	    		 "          board.depth," +
-	    		 "          board.user_no," + 
-	    		 "          users.name" + 
-	    		 "     FROM board, users" + 
-	    		 "    WHERE board.user_no = users.no" + 
-	    		 " ORDER BY group_no DESC, order_no ASC" +
-	    		 "    LIMIT ?, ?";
-	    pstmt = conn.prepareStatement( sql );
-	    pstmt.setInt( 1, (pager.getCurrentPageNumber() - 1) * pager.getPostCount() );
-	    pstmt.setInt( 2, pager.getPostCount() );
-	    rs = pstmt.executeQuery();
-
-	    while ( rs.next() ) {
-		BoardVO vo = new BoardVO();
-		vo.setNo( rs.getLong( 1 ) );
-		vo.setTitle( rs.getString( 2 ) );
-		vo.setContent( rs.getString( 3 ) );
-		vo.setHitCount( rs.getLong( 4 ) );
-		vo.setRegDate( rs.getString( 5 ) );
-		vo.setGroupNo( rs.getLong( 6 ) );
-		vo.setOrderNo( rs.getLong( 7 ) );
-		vo.setDepth( rs.getLong( 8 ) );
-		vo.setUserNo( rs.getLong( 9 ) );
-		String userName = rs.getString( 10 );
-
-		BoardDTO dto = new BoardDTO();
-		dto.setVo( vo );
-		dto.setUserName( userName );
-
-		list.add( dto );
-	    }
-	} catch ( SQLException e ) {
-	    e.printStackTrace();
-	} finally {
-	    try {
-		if ( rs != null ) rs.close();
-		if ( pstmt != null ) pstmt.close();
-		if ( conn != null ) conn.close();
-	    } catch ( SQLException e ) {
-		e.printStackTrace();
-	    }
-	}
-	return list;
-    }
-    
+        
     public List<BoardDTO> readAll(String keyword, Pager pager) {
 	List<BoardDTO> list = new ArrayList<BoardDTO>();
 	Connection conn = null;
@@ -94,6 +35,8 @@ public class BoardDAO {
 	    		 "     FROM board, users" + 
 	    		 "    WHERE board.user_no = users.no" +
 	    		 "      AND board.title LIKE '%" + keyword + "%'" +
+	    		 "       OR board.content LIKE '%" + keyword + "%'" +
+	    		 " GROUP BY board.no" + 
 	    		 " ORDER BY group_no DESC, order_no ASC" + 
 	    		 "    LIMIT ?, ?";
 	    pstmt = conn.prepareStatement( sql );
@@ -184,8 +127,8 @@ public class BoardDAO {
 	return vo;
     }
     
-    public BoardDTO readAtLast( ) {
-	BoardDTO dto = null;
+    public BoardVO readAtLast( ) {
+	BoardVO vo = null;
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
@@ -199,17 +142,15 @@ public class BoardDAO {
 	    		 "          DATE_FORMAT(board.reg_date, '%Y-%m-%d %h:%i:%s')," + 
 	    		 "          board.group_no," + 
 	    		 "          board.order_no," + 
-	    		 "          board.depth," + 
-	    		 "          users.name" + 
-	    		 "     FROM board, users" + 
-	    		 "    WHERE board.user_no = users.no" +
+	    		 "          board.depth" + 
+	    		 "     FROM board" +
 	    		 " ORDER BY board.no DESC" +
 	    		 " LIMIT 1";
 	    pstmt = conn.prepareStatement( sql );
 	    rs = pstmt.executeQuery();
 	    
 	    if ( rs.next() ) {
-		BoardVO vo = new BoardVO();
+		vo = new BoardVO();
 		vo.setNo( rs.getLong( 1 ) );
 		vo.setTitle( rs.getString( 2 ) );
 		vo.setContent( rs.getString( 3 ) );
@@ -218,11 +159,6 @@ public class BoardDAO {
 		vo.setGroupNo( rs.getLong( 6 ) );
 		vo.setOrderNo( rs.getLong( 7 ) );
 		vo.setDepth( rs.getLong( 8 ) );
-		String userName = rs.getString( 9 );
-
-		dto = new BoardDTO();
-		dto.setVo( vo );
-		dto.setUserName( userName );
 	    }
 	} catch ( SQLException e ) {
 	    e.printStackTrace();
@@ -235,10 +171,10 @@ public class BoardDAO {
 		e.printStackTrace();
 	    }
 	}
-	return dto;
+	return vo;
     }
     
-    public int readCount( ) {
+    public int readCount( String keyword ) {
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
@@ -246,36 +182,10 @@ public class BoardDAO {
 	
 	try {
 	    conn = getConnection();
-	    String sql = "SELECT COUNT(*) FROM board";
-	    pstmt = conn.prepareStatement( sql );
-	    rs = pstmt.executeQuery();
-	    
-	    if ( rs.next() ) {
-		count = rs.getInt(1);
-	    }
-	} catch ( SQLException e ) {
-	    e.printStackTrace();
-	} finally {
-	    try {
-		if ( rs != null ) rs.close();
-		if ( pstmt != null ) pstmt.close();
-		if ( conn != null ) conn.close();
-	    } catch ( SQLException e ) {
-		e.printStackTrace();
-	    }
-	}
-	return count;
-    }
-    
-    public int readCountBySearch( String keyword ) {
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
-	int count = 0;
-	
-	try {
-	    conn = getConnection();
-	    String sql = "SELECT COUNT(*) FROM board WHERE title LIKE '%" + keyword + "%'";
+	    String sql = "   SELECT COUNT(*)"
+	    	       + "     FROM board"
+	    	       + "    WHERE title LIKE '%" + keyword + "%'"
+	    	       + "       OR content LIKE '%" + keyword + "%'";
 	    pstmt = conn.prepareStatement( sql );
 	    rs = pstmt.executeQuery();
 	    

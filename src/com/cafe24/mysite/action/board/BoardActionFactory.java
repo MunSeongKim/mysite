@@ -9,9 +9,7 @@ public class BoardActionFactory extends AbstractActionFactory {
     public Action getAction( String actionName ) {
 	Action action = null;
 
-	if ( "search".equals( actionName ) ) {
-	    action = new SearchAction();
-	} else if( "view".equals( actionName ) ) {
+	if( "view".equals( actionName ) ) {
 	    action = new ViewAction();
     	} else if( "writeform".equals( actionName ) ) {
 	    action = new WriteFormAction();

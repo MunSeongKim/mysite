@@ -4,18 +4,8 @@ import com.cafe24.mysite.dao.BoardDAO;
 
 public class PagerUtil {
     public static Pager setUpPager( Pager pager, BoardDAO dao, int pageNo, String keyword ) {
-	int count = dao.readCountBySearch( keyword );
+	int count = dao.readCount( keyword );
 		
-	pager = setCurrentPageNumber( pager, pageNo );
-	pager = setStartPostNumber( pager, dao, count );
-	pager = setTotalPageCount( pager, dao, count );
-	pager = setNavigator( pager );
-	return pager;
-    }
-    
-    public static Pager setUpPager( Pager pager, BoardDAO dao, int pageNo ) {
-	int count = dao.readCount();
-	
 	pager = setCurrentPageNumber( pager, pageNo );
 	pager = setStartPostNumber( pager, dao, count );
 	pager = setTotalPageCount( pager, dao, count );

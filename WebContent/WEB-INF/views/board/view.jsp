@@ -37,19 +37,12 @@
 				<c:import url="/WEB-INF/views/comment/list.jsp" />
 				
 				<div class="bottom">
-					<c:choose>
-						<c:when test='${ param.kwd ne "" }'>
-							<a href="/mysite/board?a=search&kwd=${ param.kwd }&p=${ param.p }">글목록</a>
-						</c:when>
-						<c:otherwise>
-							<a href="/mysite/board?p=${ param.p }">글목록</a>
-						</c:otherwise>
-					</c:choose>
+					<a href="/mysite/board?kwd=${ param.kwd }&p=${ param.p }">글목록</a>
 					<c:if test="${ not empty authUser }">
-					<a href="/mysite/board?a=replyform&no=${ board.no }&p=${ param.p }">답글달기</a>
+					<a href="/mysite/board?a=replyform&kwd=${ param.kwd }&no=${ board.no }&p=${ param.p }">답글달기</a>
 					</c:if>
 					<c:if test="${ not empty authUser && board.userNo eq authUser.no }">
-					<a href="/mysite/board?a=modifyform&no=${ board.no }&p=${ param.p }">글수정</a>
+					<a href="/mysite/board?a=modifyform&kwd=${ param.kwd }&no=${ board.no }&p=${ param.p }">글수정</a>
 					</c:if>
 				</div>
 			</div>

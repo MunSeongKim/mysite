@@ -33,9 +33,13 @@
 							</td>
 						</tr>
 					</table>
+					
+					
+					
 					<div class="bottom">
-						<a href="/mysite/board?a=view&no=${ result.no }&p=${ param.p }">취소</a>
-						<input type="submit" value="수정">
+						<a href="/mysite/board?a=view&kwd=${ param.kwd }&no=${ result.no }&p=${ param.p }">취소</a>
+						
+						<input type="submit" value="수정" />
 					</div>
 				</form>				
 			</div>

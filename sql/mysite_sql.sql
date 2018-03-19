@@ -80,20 +80,23 @@ UPDATE users
  SELECT * FROM board LIMIT 1;
 (SELECT IFNULL(MAX(group_no), 0) +1 FROM board);
 
-SELECT board.no,
-	   board.title,
-       board.content,
-       board.hit_count,
-       board.reg_date,
-       board.group_no,
-       board.order_no,
-       board.depth,
-       board.user_no,
-       users.name
-  FROM board, users
- WHERE board.user_no = users.no
+  SELECT board.no,
+	     board.title,
+         board.content,
+         board.hit_count,
+         board.reg_date,
+         board.group_no,
+         board.order_no,
+         board.depth,
+         board.user_no,
+         users.name
+    FROM board, users
+   WHERE board.user_no = users.no
+     AND board.title LIKE '%%'
+      OR board.content LIKE '%%'
+GROUP BY board.no
 ORDER BY group_no DESC, order_no ASC
-   LIMIT 20, 10;
+   LIMIT 0, 10;
 
 -- 글쓰기
 INSERT INTO board

@@ -25,7 +25,7 @@ public class ReplyFormAction implements Action {
 	Long no = Long.parseLong( tmpNo );
 	BoardVO vo = new BoardDAO().read( no );
 	request.setAttribute( "result", vo );
-	request.setAttribute( "action", "reply" );
+	request.setAttribute( "action", "replyform" );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/write.jsp" );
     }
 

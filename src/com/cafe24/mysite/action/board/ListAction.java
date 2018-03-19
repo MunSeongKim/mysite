@@ -19,6 +19,11 @@ public class ListAction implements Action {
     @Override
     public void execute( HttpServletRequest request, HttpServletResponse response )
 	    throws ServletException, IOException {
+	String keyword = request.getParameter( "kwd" );
+	if ( keyword == null ) {
+	    keyword="";
+	}
+	
 	int pageNo = 0;
 	String tmpPageNo = request.getParameter( "p" );
 	if( tmpPageNo == null ){
@@ -34,12 +39,13 @@ public class ListAction implements Action {
 	}
 	
 	BoardDAO dao = new BoardDAO();
-	pager = PagerUtil.setUpPager( pager, dao, pageNo );
+	pager = PagerUtil.setUpPager( pager, dao, pageNo, keyword );
 	request.getSession().setAttribute("pager", pager);
 	
-	List<BoardDTO> list = dao.readAll(pager);
+	List<BoardDTO> list = dao.readAll(keyword, pager);
+	
 	request.setAttribute( "list", list );
-
+	request.setAttribute( "keyword", keyword );
 	WebUtil.forward( request, response, "/WEB-INF/views/board/list.jsp" );
     }
 
