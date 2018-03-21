@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cafe24.mysite.dto.BoardDTO;
 import com.cafe24.mysite.dto.CommentDTO;
-import com.cafe24.mysite.vo.BoardVO;
 import com.cafe24.mysite.vo.CommentVO;
 
 public class CommentDAO {

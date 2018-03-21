@@ -25,8 +25,9 @@ public class ViewAction implements Action {
 	    return;
 	}
 
-	BoardDAO boardDao = new BoardDAO();
 	Long no = Long.parseLong( tmpNo );
+	BoardDAO boardDao = new BoardDAO();
+	
 	// increse hit count
 	boardDao.update( no );
 	BoardVO boardVo = boardDao.read( no );
