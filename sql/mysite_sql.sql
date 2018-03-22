@@ -80,6 +80,8 @@ UPDATE users
  SELECT * FROM board LIMIT 1;
 (SELECT IFNULL(MAX(group_no), 0) +1 FROM board);
 
+SELECT last_insert_id();
+
   SELECT board.no,
 	     board.title,
          board.content,
@@ -92,11 +94,11 @@ UPDATE users
          users.no,
          users.name
     FROM board, users
-   WHERE board.user_no = users.no
-     AND (board.title LIKE '%11%'
-      OR board.content LIKE '%11%')
+   WHERE (board.user_no = users.no
+     AND board.title LIKE '%11%')
+      OR (board.user_no = users.no AND board.content LIKE '%11%')
 ORDER BY group_no DESC, order_no ASC
-   LIMIT 40, 10;
+   LIMIT 0, 10;
    
 DELETE FROM board WHERE no=147;
 
