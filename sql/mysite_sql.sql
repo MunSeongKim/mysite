@@ -89,14 +89,18 @@ UPDATE users
          board.order_no,
          board.depth,
          board.user_no,
+         users.no,
          users.name
     FROM board, users
    WHERE board.user_no = users.no
-     AND board.title LIKE '%%'
-      OR board.content LIKE '%%'
-GROUP BY board.no
+     AND (board.title LIKE '%11%'
+      OR board.content LIKE '%11%')
 ORDER BY group_no DESC, order_no ASC
-   LIMIT 0, 10;
+   LIMIT 40, 10;
+   
+DELETE FROM board WHERE no=147;
+
+SELECT COUNT(*) FROM board;
 
 -- 글쓰기
 INSERT INTO board
